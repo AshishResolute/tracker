@@ -1,0 +1,28 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Status{
+  Applied
+  Interview
+  Rejected
+  Ghosted
+  Offer
+  Recruiter_screen
+}
+
+model ApplicationDetails {
+  id Int @id @default(autoincrement())
+  title String
+  company String
+  source String
+  date DateTime @default(now())
+  status Status @default(Applied)
+  interview_stage String? @default("First_Round")
+}
