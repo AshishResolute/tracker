@@ -6,7 +6,7 @@ import {z} from 'zod';
 const Status = ['Applied', 'Interview', 'Rejected', 'Ghosted', 'Offer', 'Recruiter_screen'] as const
 
 
-const applicationSchema = z.object({
+export const applicationSchema = z.object({
     title:z.string().trim().min(8).max(50),
     company:z.string().trim().min(3).max(100),
     source:z.string().url(),

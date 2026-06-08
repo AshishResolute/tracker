@@ -1,4 +1,5 @@
 import express from "express";
+import application from './application.js'
 import type { Request,Response } from "express";
 
 const app = express();
@@ -12,6 +13,11 @@ app.get("/health", (req:Request, res:Response) => {
     timeStamp: new Date().toLocaleString(),
   });
 });
+
+app.use('/application',application)
+
+
+
 const PORT = process.env.PORT || 3000;
 
 export { app, PORT };
