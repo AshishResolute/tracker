@@ -22,6 +22,25 @@ export const addApplication = async(req:Request<{},{},JobApplication>,res:Respon
     }
     catch(error)
     {
-        console.error(`Error:${error.message}`)
+        console.error(`Error:${(error as Error).message}`)
+        next(error)
     }
 }
+
+
+// later i'll add pagination 
+export const getApplications = async(req:Request<{},{},{},{}>,res:Response,next:NextFunction)=>{
+    try{
+        const fetchApplications = await prisma.applicationDetails.findMany()
+        res.status(200).json({
+            success:true,
+            message:`Applications fetched`,
+            applications:fetchApplications,
+            timeStamp:new Date().toISOString()
+        })
+    }
+    catch(error){
+        console.error(`Error:${(error as Error).message}`)
+    }
+}
+

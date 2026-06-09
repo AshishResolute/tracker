@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import type { AnyZodObject } from "zod/v3";
-
-const validate = (schema: AnyZodObject) => {
+import type { ZodObject } from "zod";
+import { ValidatonError } from "../errors/validation.error.js";
+const validate = (schema: ZodObject) => {
   return async (
     req: Request,
     res: Response,
@@ -10,15 +10,16 @@ const validate = (schema: AnyZodObject) => {
     const result = await schema.safeParse(req.body);
 
     if (!result.success) {
-      res.status(400).json({
-        success: false,
-        message: `Validation Failed`,
-        errors: result.error.issues.map((err)=>err.message),
-      });
-      
-      return;
+      // have implemented an global error handler middleware which takes a custom error class to get clean and clear error messages.
+      // res.status(400).json({
+      //   success: false,
+      //   message: `Validation Failed`,
+      //   errors: result.error.issues.map((err)=>err.message),
+      // });
+      // here i was stuck with type mismatch as my third argument in error class expects a string[] but result.error.issues is not an string[] its an custom [{}] meaning array of ZodError which are custom objects so i had to map over the array of objects(ZodError) to pass the array of strings 
+     return next(new ValidatonError(`Input validation Failed`,400,result.error.issues.map((err):string=>err.message)))
     }
-
+    // learnt that next is just an function call it doesn't ends our function just runs the desired function or moves to next function,so return is imp to handle headers already sent if some middleware has already sent a response back to client 
     req.body = result.data;
     next();
   };

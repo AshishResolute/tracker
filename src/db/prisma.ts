@@ -7,6 +7,7 @@ const connectionString = process.env.DATABASE_URL;
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
+
 (async () => {
   try {
     const details = await prisma.$queryRaw<{ now: Date }[]>`select now()`;
