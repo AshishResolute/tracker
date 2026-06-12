@@ -58,3 +58,10 @@ export const applicationIdSchema = z.object({
 })
 export type IdParam = z.infer<typeof applicationIdSchema>
 export type UpdateApplication = z.infer<typeof updateApplicationSchema>
+
+export const paginationSchema = z.object({
+  page:z.coerce.number({error:`Invalid input,enter a number`}).positive(`Page must be a positive number`),
+  limit:z.coerce.number({error:`Invalid input ,enter a number`})
+});
+
+export type paginationQuery = z.infer<typeof paginationSchema>

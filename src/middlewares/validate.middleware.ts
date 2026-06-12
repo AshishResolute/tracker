@@ -31,7 +31,7 @@ const validate = (schema: RequestValidationSchema) => {
     }
     if (schema.body) {
       const result = await schema.body.safeParse(req.body);
-
+      
       if (!result.success) {
         // have implemented an global error handler middleware which takes a custom error class to get clean and clear error messages.
         // res.status(400).json({
@@ -61,7 +61,9 @@ const validate = (schema: RequestValidationSchema) => {
             result.error.issues.map((err) => err.message),
           ),
         );
-      req.query = result.data as any;
+      // req.query = result.data as any; this will throw an error as i cant change the req.query express provides just read only access basically just a getter
+      // learnt to send the validated data to res.locals
+      res.locals=result.data
     }
     next();
   };
