@@ -27,7 +27,6 @@ const validate = (schema: RequestValidationSchema) => {
         );
       }
       req.params = result.data as any;
-      console.log(req.params)
     }
     if (schema.body) {
       const result = await schema.body.safeParse(req.body);

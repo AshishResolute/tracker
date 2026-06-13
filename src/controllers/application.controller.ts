@@ -7,8 +7,10 @@ import type {
 } from "../vallidator/vallidator.ts";
 import { prisma } from "../db/prisma.js";
 import { ValidatonError } from "../errors/validation.error.js";
+import { NotFoundError } from "../errors/notFound.error.js";
 import type { ApplicationDetails } from "../generated/prisma/client.js";
 import { Prisma } from "../generated/prisma/client.js";
+
 export const addApplication = async (
   req: Request<{}, {}, JobApplication>,
   res: Response,
@@ -109,7 +111,6 @@ export const updateApplication = async (
     }
     const setClause = Prisma.join(dynamicQuery, ", ");
 
-    console.log(setClause);
     // this will always fail and cant use query.RawUnsafe() can inject sql so a diff approach
     const updatedApplication = await prisma.$queryRaw<
       ApplicationDetails[]
@@ -120,6 +121,62 @@ export const updateApplication = async (
     });
   } catch (error) {
     console.error(`Error:${(error as Error).message}`);
+    next(error);
+  }
+};
+
+export const deleteApplication = async (
+  req: Request<IdParam, {}, {}, {}>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    // just get the validated param applicationid and delete it
+    const { id } = req.params;
+    // usually getting around 50-60ms response time now let me use promise.all() to run both queries parallely and see the changes
+    // const checkApplicationId = await prisma.applicationDetails.findFirst({
+    //   where:{
+    //     id
+    //   }
+    // })
+    // Using Promise.all([]) returns an array of promises
+    // const [checkApplicationId, deletedApplication] = await Promise.all([
+    //   await prisma.applicationDetails.findFirst({
+    //     where: {
+    //       id,
+    //     },
+    //   }),
+    //   await prisma.applicationDetails.delete({
+    //     where: { id }
+    //   }),
+    // ]); 
+    // // skipped promise.all() as the delete query is dependent on the first id check or else it will run delete on non existing id crashing the app
+    // if (!checkApplicationId)
+    //   return next(
+    //     new NotFoundError(
+    //       `Application does not exists`,
+    //       400,
+    //       `Application not found`,
+    //     ),
+    //   );
+    const deletedApplication = await prisma.applicationDetails.delete({
+      where:{id}
+    })
+    res.status(200).json({
+      success: true,
+      message: `Application Deleted successfully`,
+      deletedApplication,
+    });
+  } catch (error) {
+    // console.error(`Error:${(error as Error).message}`);
+    if(error.code==='P2025')  return next(
+        new NotFoundError(
+          `Application does not exists`,
+          400,
+          `Application not found`,
+        ),
+      );
+      // both the queries were dependent so just used a single query delete and handled the not found to delete in the catch block,as prisma return P2025 code
     next(error);
   }
 };

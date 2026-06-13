@@ -11,7 +11,7 @@ app.get("/health", (req:Request, res:Response) => {
   res.status(200).json({
     success: true,
     message: `Services running well!`,
-    timeStamp: new Date().toLocaleString(),
+    timeStamp: new Date().toISOString(),
   });
 });
 

@@ -54,7 +54,7 @@ export const updateApplicationSchema = z.object({
 
 
 export const applicationIdSchema = z.object({
-    id:z.string()
+    id:z.coerce.number()
 })
 export type IdParam = z.infer<typeof applicationIdSchema>
 export type UpdateApplication = z.infer<typeof updateApplicationSchema>
