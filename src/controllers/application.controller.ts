@@ -43,18 +43,20 @@ export const getApplications = async (
   req: Request<{}, {}, {}, paginationQuery>,
   res: Response,
   next: NextFunction,
-) => {
+):Promise<void> => {
   try {
     // lets add offset based pagination
     // offset = (page*limit)-limit ex lets say i have 3 rows and limit as 1 then i would have 3 pages offset for page 1 should be 0 by (1*1)-1=0,for page 1 offset would be 1 meaning skip 1 row (2*1)-1=1
     // const {page,limit} = parseInt(req.query)// learnt that query params in express provide just read-only access cant modify it
-    const { page, limit } = res.locals;
+    let { page, limit } = res.locals;
+    page = page||1
+    limit = limit||1
     let offset: number = page * limit - limit;
     // const fetchApplications = await prisma.applicationDetails.findMany();
     // need to write a custom query
     const fetchApplications =
       await prisma.$queryRaw<ApplicationDetails>`select * from "ApplicationDetails" limit ${limit} offset ${offset}`;
-    res.status(200).json({
+    res.setHeader('Access-Control-Allow-Origin','http://localhost:5173').status(200).json({
       success: true,
       message: `Applications fetched`,
       applications: fetchApplications,
