@@ -1,14 +1,14 @@
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
+  engineType = "binary"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-enum Status{
+enum Status {
   Applied
   Interview
   Rejected
@@ -18,12 +18,13 @@ enum Status{
 }
 
 model ApplicationDetails {
-  id Int @id @default(autoincrement())
-  title String
-  company String
-  source String
-  date DateTime @default(now())
-  status Status @default(Applied)
-  interview_stage String? @default("First_Round")
+  id              Int      @id @default(autoincrement())
+  title           String
+  company         String
+  source          String
+  date            DateTime @default(now())
+  status          Status   @default(Applied)
+  interview_stage String?  @default("First_Round")
+
   @@map("ApplicationDetails")
 }

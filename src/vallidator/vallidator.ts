@@ -15,8 +15,8 @@ export const applicationSchema = z.object({
   title: z.string().trim().min(8).max(50),
   company: z.string().trim().min(3).max(100),
   source: z.string().url(),
-  date: z.coerce.date(),
-  status: z.enum(Status),
+  date: z.string().datetime(),
+  status: z.enum(Status).optional(),
   interview_stage: z.string().trim().min(3).max(28).optional(),
 });
 

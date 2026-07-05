@@ -50,7 +50,7 @@ export const getApplications = async (
     // const {page,limit} = parseInt(req.query)// learnt that query params in express provide just read-only access cant modify it
     let { page, limit } = res.locals;
     page = page||1
-    limit = limit||1
+    limit = limit||10
     let offset: number = page * limit - limit;
     // const fetchApplications = await prisma.applicationDetails.findMany();
     // need to write a custom query
