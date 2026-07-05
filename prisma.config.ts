@@ -4,13 +4,13 @@
 import { defineConfig } from "prisma/config";
 import { DATABASE_URL } from "./src/config/config.js";
 
-console.log(DATABASE_URL)
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url:DATABASE_URL,
+    url:DATABASE_URL!,
   },
 });
