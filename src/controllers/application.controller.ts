@@ -162,7 +162,7 @@ export const deleteApplication = async (
     //     ),
     //   );
     const deletedApplication = await prisma.applicationDetails.delete({
-      where:{id}
+      where:{id:parseInt(id,10)}
     })
     res.status(200).json({
       success: true,
