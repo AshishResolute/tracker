@@ -56,7 +56,7 @@ export const updateApplicationSchema = z.object({
 export const applicationIdSchema = z.object({
     id:z.coerce.number().positive({})
 })
-export type IdParam = z.infer<typeof applicationIdSchema>
+export type IdParam = {id:string}
 export type UpdateApplication = z.infer<typeof updateApplicationSchema>
 
 export const paginationSchema = z.object({
