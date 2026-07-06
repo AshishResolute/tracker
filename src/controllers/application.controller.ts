@@ -56,7 +56,7 @@ export const getApplications = async (
     // need to write a custom query
     const fetchApplications =
       await prisma.$queryRaw<ApplicationDetails>`select * from "ApplicationDetails" limit ${limit} offset ${offset}`;
-    res.setHeader('Access-Control-Allow-Origin','http://localhost:5173').status(200).json({
+    res.status(200).json({
       success: true,
       message: `Applications fetched`,
       applications: fetchApplications,
