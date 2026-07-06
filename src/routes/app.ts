@@ -7,7 +7,8 @@ import cors from 'cors'
 const app = express();
 
 app.use(cors({
-  origin:"https://tracker-front-end-xi.vercel.app/"
+  origin:"https://tracker-front-end-xi.vercel.app",
+  credentials:true
 }))
 app.use(express.json());
 app.use(morgan('dev')) 
